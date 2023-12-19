@@ -11,15 +11,10 @@ const userservice = new UserService()
 export const createUser = async(req:Request,res:Response):Promise<void> =>{
   try {
   const dto:userdto = req.body
-  if(!dto.username || !dto.email || !dto.password){
-    res.status(404).json({error:' field is required ! '})
-  }
+  if(!dto.username || !dto.email || !dto.password){res.status(404).json({error:' field is required ! '})}
    const newUser = await userservice.createUser(dto)
    res.status(201).json(newUser)
-  } catch (error) {
-  console.log('Controller:createuser:error',error);
-  
-  }
+  } catch (error) { console.log('Controller:createuser:error',error)}
 }
 
 
@@ -36,9 +31,7 @@ export const getUserById = async(req:Request,res:Response):Promise<void> =>{
     const user = await userservice.getUserById(id)
     if(!user){res.status(404).json({error:' User not found !'})}
     res.status(200).json({data:user})
-  } catch (error) {
-    console.log('Controller :getUserById :error',error);
-  }
+  } catch (error) {console.log('Controller :getUserById :error',error)}
 }
 
 
@@ -56,11 +49,8 @@ export const LoginUser  = async(req:Request,res:Response):Promise<void>=>{
    if(!req.body.email || !req.body.password){res.status(404).json({error:'Field is required'})}
    const data = await userservice.LoginUser(email,password)
    if(!data){res.json('User not found !')}
-   res.status(200).json({data:` User login successfull:  UserToken => ${data}`})
-    
-  } catch (error) {
-    console.log(error,'Login User error');
-  }
+   res.status(200).json({data:` User login successfull:  UserToken => ${data}`})    
+  } catch (error) {console.log(error,'Login User error')}
     
 }
 
@@ -68,13 +58,10 @@ export const LoginUser  = async(req:Request,res:Response):Promise<void>=>{
 // Update User ..
 export const updateUser = async(req:Request,res:Response):Promise<void>=>{
   try {
-  const id = parseInt(req.params.id)
-  
+  const id = parseInt(req.params.id)  
   const user = userservice.UpdateUser(id,req.body)
   res.status(200).json({data:' User Updated successfully '})
-  } catch (error) {
-    console.log(error,'update user error');
-  }
+  } catch (error) {console.log(error,'update user error')}
     
 }
 
@@ -85,19 +72,12 @@ try {
 const id = parseInt(req.query.id as string)  
 const {email,password} = req.body
 const admin = await userservice.AdminLogin(email,password)
-if(admin === null){
-  res.json(' Invalid username or password ')
-}
+if(admin === null){res.json(' Invalid username or password ')}
 const token = admin
 console.log(token,'token.......');
-
 res.cookie("jwt",token) 
 res.status(200).json({data:' Admin login successfull ! '})
-
-
-} catch (error) {
-  console.log(error,'Admin login error');
-}
+} catch (error) { console.log(error,'Admin login error')}
 }
 
 
@@ -106,15 +86,10 @@ export const AdminLogOut = async(req:Request,res:Response):Promise<void>=>{
   try {
   const {email,password} = req.body
   const admin = await userservice.adminLogOut(email,password) 
-  if(admin == null){
-    res.json('Invalid username or password')
-  }
+  if(admin == null){res.json('Invalid username or password')}
   res.clearCookie("jwt") 
   res.status(200).json({data:'Admin LogOut'})
-  } catch (error) {
-  console.log(' Admin login side error ',error);
-    
-  }
+  } catch (error) {console.log(' Admin login side error ',error)}
 }
 
 
@@ -123,9 +98,7 @@ export const Forgetpassword = async(req:Request,res:Response):Promise<void>=>{
   try {
    const {email} = req.body
    const data = await userservice.forgetpassword(email)  
-  if(!data){
-    res.json('User not found')
-  } 
+  if(!data){res.json('User not found')} 
 
   const transporter = nodemailer.createTransport({
     service:'gmail',
@@ -146,13 +119,10 @@ export const Forgetpassword = async(req:Request,res:Response):Promise<void>=>{
       console.error('Error sending email:.....', error);
     } else {
       console.log('Email sent:', info.response);
-    }
-  });
+    }});
   
   res.status(200).json({data:' Check link in your register mail Id '})
-  } catch (error) {
-    console.log(' forget password error ',error);
-  }
+  } catch (error) {console.log(' forget password error ',error)}
     
 }
 
@@ -170,9 +140,7 @@ if(!data){
 }
 res.status(200).json({data:'You Passwprd reset successfull !'})
 
-} catch (error) {
-console.log(' Reset password error :',error);
-}
+} catch (error) {console.log(' Reset password error :',error)}
 }
 
 // export const resetlink = async(req:Request,res:Response):Promise<void>=>{
@@ -198,9 +166,9 @@ export const pagination = async(req:Request,res:Response):Promise<void>=>{
       res.json(' Data not found !')
     }
     res.status(200).json({data:userPagination})
-  } catch (error) {
-    console.log('UserPagination error:',error);
-    
-  }
+  } catch (error) {console.log('UserPagination error:',error)}
 }
 
+
+
+//                 ********************** JAY TARSARIYA *****************************

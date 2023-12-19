@@ -7,7 +7,6 @@ import { Task } from '../../entity/task';
 
 export class UserService {
   private userrepo = AppDataSource.getRepository(User);
-
   async createUser(dto: userdto): Promise<User> {
     const hashedpassword = await bcrypt.hash(dto.password, 10);
     const newUser = new User();
@@ -16,8 +15,7 @@ export class UserService {
     newUser.password = hashedpassword;
     newUser.isAdmin = dto.isAdmin;
     newUser.permission = dto.permission;
-    return await this.userrepo.save(newUser);
-  }
+    return await this.userrepo.save(newUser); }
 
   async getAllUser(): Promise<User[]> {
     return await this.userrepo.find();
@@ -41,9 +39,7 @@ export class UserService {
       if (comparepass) {const token = await jwt.sign({ id: viewdata.id },'THISISMYTOKENSECRETKEY');
         return token;
       }
-    } else {
-      return null;
-    }
+    } else { return null}
   }
 
   async UpdateUser(id: number, dto: userdto): Promise<any> {
@@ -72,11 +68,8 @@ export class UserService {
       return null;
     } else {
       const checkpass = await bcrypt.compare(password, data.password);
-      if (!checkpass) {
-        return null;
-      }
-      return data;
-    }
+      if (!checkpass) {return null}
+      return data}
   }
 
   async forgetpassword(email: string): Promise<any> {
@@ -90,13 +83,7 @@ export class UserService {
     });
     await this.userrepo.update({ id: user.id }, { token });
     const link = `http://localhost:3000/api/resetpassword/${token}`;
-    return link;
-
-
-
-
-
-  }
+    return link; }
 
   async resetpassword(token: string,password:string): Promise<User | any> {
     const finduser = await this.userrepo.findOne({ where: { token } });
@@ -123,14 +110,7 @@ export class UserService {
     const skip = (page - 1) * perpage;
     const take = perpage;
 
-    const user = await this.userrepo.find({
-      where: {
-        isdeletedAt: false,
-      },
-      skip,
-      take,
-    });
-
+    const user = await this.userrepo.find({where: {isdeletedAt: false},skip,take,});
     const totalcount = await this.userrepo.count();
     return { user, totalcount };
   }
